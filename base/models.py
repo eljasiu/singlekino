@@ -15,8 +15,14 @@ class Show(models.Model):
     date = models.DateField()
     time = models.TimeField()
 
+    def __str__(self):
+        return "{}_{}_{}".format(self.movie, self.date, self.time)
+
 class Reservation(models.Model):
     show = models.ForeignKey(Show, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     row = models.CharField(max_length=1)
     seat = models.IntegerField()
+
+    def __str__(self):
+        return "{}_{}_{}_{}".format(self.show, self.user, self.row, self.seat)
