@@ -1,0 +1,30 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<div>
+    {% for date in timeline %}
+        <a href="{% url 'shows' date.year date.month date.day %}">
+            <span>{{date.day}}</span>
+            <span>{{date.month}}</span>
+        </a>
+    {% endfor %}
+</div>
+
+{% for movie in movies %}
+    <div>
+        <img src={{movie.image}} />
+        
+        <h3>{{movie.title}}</h3>
+        <p>{{movie.description}}</p>
+
+        <div>
+            <h4>Zarezerwuj:</h4>
+            {% for show in movie.shows %}
+                <p>{{show.time}}</p>
+            {% endfor %}
+        </div>
+    </div>
+{% endfor %}
+
+{% endblock %}
