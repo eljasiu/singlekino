@@ -2,7 +2,7 @@ import datetime
 
 from django.shortcuts import render
 
-from .models import Movie
+from .models import Movie, Show, Reservation
 
 def index(request):
     today = datetime.date.today()
@@ -21,3 +21,14 @@ def shows(request, year, month, day):
         'timeline': timeline
     }
     return render(request, 'base/shows.html', ctx)
+
+def reserve(request, show_id):
+    show = Show.objects.get(id=show_id)
+
+    reserved = [str(reservation.row)+'-'+str(reservation.seat) for reservation in Reservation.objects.filter(show = show)]
+
+    ctx = {
+        'show': show,
+        'reserved': reserved
+        }
+    return render(request, 'base/reserve.html', ctx)

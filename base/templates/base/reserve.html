@@ -1,0 +1,12 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+
+<h1>Hi. You're reserving {{show.id}}.</h1>
+
+<div id='wrapper'></div>
+
+{{ reserved|json_script:"reserved" }}
+<script src="{% static 'scripts/reserve.js' %}"></script> 
+{% endblock %}

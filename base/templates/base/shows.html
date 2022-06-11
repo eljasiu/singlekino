@@ -21,7 +21,7 @@
         <div>
             <h4>Zarezerwuj:</h4>
             {% for show in movie.shows %}
-                <p>{{show.time}}</p>
+                <a href="{% url 'reserve' show.id %}">{{show.time}}</a>
             {% endfor %}
         </div>
     </div>
