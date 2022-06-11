@@ -1,0 +1,17 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+
+<h2>{{show.movie}}</h2>
+<p>{{show.date}}, {{show.time}}</p>
+
+<form action="{% url 'reserve' show.id %}" method='post'>
+    {% csrf_token %}
+    <div id='wrapper'></div>
+    <input type='submit' value='Zarezerwuj'>
+</form>
+
+{{ reserved|json_script:"reserved" }}
+<script src="{% static 'scripts/select.js' %}"></script> 
+{% endblock %}

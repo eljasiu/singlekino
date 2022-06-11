@@ -1,8 +1,10 @@
 import datetime
 
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
+from django.urls import reverse
 
-from .models import Movie, Show, Reservation
+from .models import Movie, Show, Reservation, User
 
 def index(request):
     today = datetime.date.today()
@@ -22,13 +24,26 @@ def shows(request, year, month, day):
     }
     return render(request, 'base/shows.html', ctx)
 
-def reserve(request, show_id):
+def select(request, show_id):
     show = Show.objects.get(id=show_id)
-
     reserved = [str(reservation.row)+'-'+str(reservation.seat) for reservation in Reservation.objects.filter(show = show)]
 
     ctx = {
         'show': show,
         'reserved': reserved
-        }
-    return render(request, 'base/reserve.html', ctx)
+    }
+    return render(request, 'base/select.html', ctx)
+
+def reserve(request, show_id):
+    show = Show.objects.get(id=show_id)
+    user = User.objects.get(username='user')
+
+    for place in request.POST.getlist('selected'):
+        [row, seat] = place.split('-')
+        reservation = Reservation(show=show, user=user, row=row, seat=seat)
+        reservation.save()
+
+    return HttpResponseRedirect(reverse('index'))
+ 
+    
+    
