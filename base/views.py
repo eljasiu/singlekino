@@ -1,6 +1,6 @@
 import datetime
 
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
@@ -98,6 +98,19 @@ def reserve(request, show_id):
         reservation.save()
 
     return HttpResponseRedirect(reverse('index'))
- 
+
+@login_required(login_url='login')
+def mine(request):
+    reservations = Reservation.objects.filter(user=request.user)
     
-    
+    showDict = {}
+    for reservation in reservations:
+        if reservation.show in showDict:
+            showDict[reservation.show].append(reservation)
+        else:
+            showDict[reservation.show] = [reservation]
+
+    ctx = {
+        'showDict': showDict
+    }
+    return render(request, 'base/mine.html', ctx)

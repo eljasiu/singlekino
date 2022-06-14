@@ -21,6 +21,9 @@ class Show(models.Model):
     date = models.DateField()
     time = models.TimeField()
 
+    class Meta:
+        ordering = ['-date', '-time']
+
     def __str__(self):
         return "{}_{}_{}".format(self.movie, self.date, self.time)
 

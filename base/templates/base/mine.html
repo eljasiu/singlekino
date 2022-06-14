@@ -1,0 +1,25 @@
+{% extends 'main.html' %}
+
+{% block content %}
+    {% for show, reservations in showDict.items %}
+    <div>
+        <img src={{show.movie.image}}>
+
+        <h3>{{show.movie.title}}</h3>
+        <p>{{show.movie.description}}</p>
+
+        <div>
+            <p>{{show.date}}</p>
+            <p>{{show.time}}</p>
+        </div>
+
+        <div>
+            {% for reservation in reservations %}
+                <p>{{reservation.row}}-{{reservation.seat}}</p>
+            {% endfor %}
+        </div>
+
+        <hr>
+    </div>
+    {% endfor %}
+{% endblock %}
