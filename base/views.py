@@ -1,10 +1,62 @@
 import datetime
 
-from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import redirect, render
 from django.urls import reverse
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from .forms import UserForm
 
-from .models import Movie, Show, Reservation, User
+from .models import User, Movie, Show, Reservation
+
+def loginView(request):
+    page = 'login'
+    if request.method == 'POST':
+        email = request.POST.get('email').lower()
+        password = request.POST.get('password')
+
+        try:
+            user = User.objects.get(email=email)
+        except:
+            return HttpResponse('Taki użytkownik nie istnieje!')
+
+        user = authenticate(request, email=email, password=password)
+
+        if user is not None:
+            login(request, user)
+            return redirect('index')
+        else:
+            return HttpResponse('Błędny email lub hasło!')
+
+    ctx = {
+        'page': page
+    }
+    return render(request, 'base/login_register.html', ctx)
+
+def logoutView(request):
+    logout(request)
+    return redirect('index')
+
+def registerView(request):
+    page = 'register'
+    form = UserForm()
+
+    if request.method == 'POST':
+        form = UserForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.email = user.email.lower()
+            user.save()
+            return redirect('index')
+        else:
+            return HttpResponse('Wystąpił błąd podczas rejestracji!')
+
+
+    ctx = {
+        'page': page,
+        'form': form
+    }
+    return render(request, 'base/login_register.html', ctx)
 
 def index(request):
     today = datetime.date.today()
@@ -24,6 +76,7 @@ def shows(request, year, month, day):
     }
     return render(request, 'base/shows.html', ctx)
 
+@login_required(login_url='login')
 def select(request, show_id):
     show = Show.objects.get(id=show_id)
     reserved = [str(reservation.row)+'-'+str(reservation.seat) for reservation in Reservation.objects.filter(show = show)]
@@ -34,9 +87,10 @@ def select(request, show_id):
     }
     return render(request, 'base/select.html', ctx)
 
+@login_required(login_url='login')
 def reserve(request, show_id):
     show = Show.objects.get(id=show_id)
-    user = User.objects.get(username='user')
+    user = request.user
 
     for place in request.POST.getlist('selected'):
         [row, seat] = place.split('-')
