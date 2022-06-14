@@ -1,3 +1,5 @@
+import datetime
+
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
@@ -23,6 +25,9 @@ class Show(models.Model):
 
     class Meta:
         ordering = ['-date', '-time']
+
+    def is_past(self):
+        return datetime.date.today() > self.date and datetime.datetime.now().time() > self.time
 
     def __str__(self):
         return "{}_{}_{}".format(self.movie, self.date, self.time)

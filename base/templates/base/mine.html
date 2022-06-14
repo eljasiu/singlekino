@@ -18,6 +18,10 @@
                 <p>{{reservation.row}}-{{reservation.seat}}</p>
             {% endfor %}
         </div>
+        
+        {% if not show.is_past %}
+            <a href="{% url 'select' show.id %}">Edytuj rezerwację</a>
+        {% endif %}
 
         <hr>
     </div>

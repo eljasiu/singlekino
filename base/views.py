@@ -47,6 +47,7 @@ def registerView(request):
         if form.is_valid():
             user = form.save(commit=False)
             user.email = user.email.lower()
+            user.username = user.email.split('@')[0]
             user.save()
             return redirect('index')
         else:
@@ -79,11 +80,13 @@ def shows(request, year, month, day):
 @login_required(login_url='login')
 def select(request, show_id):
     show = Show.objects.get(id=show_id)
-    reserved = [str(reservation.row)+'-'+str(reservation.seat) for reservation in Reservation.objects.filter(show = show)]
+    reserved = [str(reservation.row)+'-'+str(reservation.seat) for reservation in Reservation.objects.filter(show=show)]
+    old = [str(reservation.row)+'-'+str(reservation.seat) for reservation in Reservation.objects.filter(user=request.user, show=show)]
 
     ctx = {
         'show': show,
-        'reserved': reserved
+        'reserved': reserved,
+        'old': old
     }
     return render(request, 'base/select.html', ctx)
 
@@ -92,6 +95,7 @@ def reserve(request, show_id):
     show = Show.objects.get(id=show_id)
     user = request.user
 
+    Reservation.objects.filter(user=user, show=show).delete()
     for place in request.POST.getlist('selected'):
         [row, seat] = place.split('-')
         reservation = Reservation(show=show, user=user, row=row, seat=seat)

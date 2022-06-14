@@ -1,5 +1,8 @@
 const reserved = JSON.parse(document.getElementById('reserved').textContent);
 
+oldRaw = document.getElementById('old')
+old = oldRaw ? JSON.parse(oldRaw.textContent) : []
+
 const wrapper = document.querySelector('#wrapper')
 
 const generateSchema = (rows, seatsInRow) => {
@@ -19,11 +22,14 @@ const generateSchema = (rows, seatsInRow) => {
             seatInput.setAttribute('name', 'selected')
             seatInput.setAttribute('id', String.fromCharCode(96 + i)+'-'+j)
             seatInput.setAttribute('value', String.fromCharCode(96 + i)+'-'+j)
-            reserved.includes(seatInput.id) && seatInput.setAttribute('disabled', 'true')
+            if(old.includes(seatInput.id))
+                seatInput.setAttribute('checked', 'true');
+            else if(reserved.includes(seatInput.id))
+                seatInput.setAttribute('disabled', 'true')
 
             const seatLabel = document.createElement('label')
             seatLabel.setAttribute('for', String.fromCharCode(96 + i)+'-'+j)
-            seatLabel.innerText = reserved.includes(seatInput.id) ? seatInput.id+'*' : seatInput.id
+            seatLabel.innerText = seatInput.id
 
             seat.appendChild(seatInput)
             seat.appendChild(seatLabel)
