@@ -5,9 +5,10 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from .forms import UserForm
+from django.contrib import messages
 
 from .models import User, Movie, Show, Reservation
+from .forms import UserForm
 
 def loginView(request):
     page = 'login'
@@ -18,7 +19,7 @@ def loginView(request):
         try:
             user = User.objects.get(email=email)
         except:
-            return HttpResponse('Taki użytkownik nie istnieje!')
+            messages.error(request, 'Taki użytkownik nie istnieje!')
 
         user = authenticate(request, email=email, password=password)
 
@@ -26,7 +27,7 @@ def loginView(request):
             login(request, user)
             return redirect('index')
         else:
-            return HttpResponse('Błędny email lub hasło!')
+            messages.error(request, 'Błędny email lub hasło!')
 
     ctx = {
         'page': page
@@ -49,8 +50,7 @@ def registerView(request):
             user.save()
             return redirect('index')
         else:
-            return HttpResponse('Wystąpił błąd podczas rejestracji!')
-
+            messages.error(request, 'Wystąpił błąd podczas rejestracji!')
 
     ctx = {
         'page': page,
