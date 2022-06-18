@@ -2,28 +2,33 @@
 
 {% block content %}
     {% for show, reservations in showDict.items %}
-    <div>
-        <img src={{show.movie.image}}>
-
-        <h3>{{show.movie.title}}</h3>
-        <p>{{show.movie.description}}</p>
-
-        <div>
-            <p>{{show.date}}</p>
-            <p>{{show.time}}</p>
+    <div class="movie">
+        <div class="movie_image">
+            <a target=”_blank” href={{show.movie.filmweb}}>
+                <img src={{show.movie.image}} />
+            </a>
+        </div>
+        
+        <div class="movie_desc">
+            <h3 class="movie_title">{{show.movie.title}}</h3>
+            <p class="">{{show.movie.description}}</p>
         </div>
 
-        <div>
+        <div class="reservation_date">
+            <p>{{show.date|date:"d.m.y"}} - {{show.time|date:"G:i"}}</p>
+        </div>
+
+        <div class="reservation_seats">
             {% for reservation in reservations %}
-                <p>{{reservation.row}}-{{reservation.seat}}</p>
+                <span>{{reservation.row}}-{{reservation.seat}}</span>
             {% endfor %}
         </div>
         
         {% if not show.is_past %}
-            <a href="{% url 'select' show.id %}">Edytuj rezerwację</a>
+            <div class="reservation_edit">
+                <a href="{% url 'select' show.id %}">Edytuj</a>
+            </div>
         {% endif %}
-
-        <hr>
     </div>
     {% endfor %}
 {% endblock %}

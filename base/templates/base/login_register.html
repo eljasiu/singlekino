@@ -3,28 +3,36 @@
 {% block content %}
 
 {% if page == 'login' %}
-    <form method='POST' action=''>
+    <form class="login_register" method='POST' action=''>
         {% csrf_token %}
 
-        <label>Email: </label>
-        <input type='text' name='email'>
+        <div>
+            <label>Email: </label>
+            <input type='text' name='email'>
+        </div>
 
-        <label>Hasło: </label>
-        <input type='password' name='password'>
+        <div>
+            <label>Hasło: </label>
+            <input type='password' name='password'>
+        </div>
 
         <input type='submit' value='Zaloguj'>
 
-        <p>Nie masz jeszcze konta?</p>
-        <a href="{% url 'register' %}">Zarejestruj</a>
+        <div class="toggle">
+            <p>Nie masz jeszcze konta?</p>
+            <a href="{% url 'register' %}">Zarejestruj</a>
+        </div>
     </form>
 {% elif page == 'register' %}
-    <form method='POST' action=''>
+    <form class="login_register" method='POST' action=''>
         {% csrf_token %}
         {{ form.as_p }}
         <input type='submit' value='Zarejestruj'>
 
-        <p>Masz już konto?</p>
-        <a href="{% url 'login' %}">Zaloguj</a>
+        <div class="toggle">
+            <p>Masz już konto?</p>
+            <a href="{% url 'login' %}">Zaloguj</a>
+        </div>
     </form>
 {% endif %}
 

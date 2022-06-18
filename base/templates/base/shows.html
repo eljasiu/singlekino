@@ -2,27 +2,34 @@
 
 {% block content %}
 
-<div>
+<section class="timeline">
     {% for date in timeline %}
-        <a href="{% url 'shows' date.year date.month date.day %}">
-            <span>{{date.day}}</span>
-            <span>{{date.month}}</span>
+        <a class="day" href="{% url 'shows' date.year date.month date.day %}">
+            <span>{{date.day}}.{{date.month}}</span>
         </a>
     {% endfor %}
-</div>
+</section>
 
 {% for movie in movies %}
-    <div>
-        <img src={{movie.image}} />
+    <div class="movie">
+        <div class="movie_image">
+            <a target=”_blank” href={{movie.filmweb}}>
+                <img src={{movie.image}} />
+            </a>
+        </div>
         
-        <h3>{{movie.title}}</h3>
-        <p>{{movie.description}}</p>
+        <div class="movie_desc">
+            <h3 class="movie_title">{{movie.title}}</h3>
+            <p class="">{{movie.description}}</p>
+        </div>
 
-        <div>
+        <div class="shows_hours">
             <h4>Zarezerwuj:</h4>
-            {% for show in movie.shows %}
-                <a href="{% url 'select' show.id %}">{{show.time}}</a>
-            {% endfor %}
+                <div class="hours">
+                {% for show in movie.shows %}
+                    <a href="{% url 'select' show.id %}">{{show.time|date:"G:i"}}</a>
+                {% endfor %}
+            </div>
         </div>
     </div>
 {% endfor %}

@@ -3,13 +3,15 @@
 
 {% block content %}
 
-<h2>{{show.movie}}</h2>
-<p>{{show.date}}, {{show.time}}</p>
+<div class="show_details">
+    <h2>{{show.movie}}</h2>
+    <p>{{show.date}}, {{show.time}}</p>
+</div>
 
 <form action="{% url 'reserve' show.id %}" method='post'>
     {% csrf_token %}
     <div id='wrapper'></div>
-    <input type='submit' value='Zarezerwuj'>
+    <input class="reserve_btn" type='submit' value='Zarezerwuj'>
 </form>
 
 {{ reserved|json_script:"reserved" }}

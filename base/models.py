@@ -24,7 +24,7 @@ class Show(models.Model):
     time = models.TimeField()
 
     class Meta:
-        ordering = ['-date', '-time']
+        ordering = ['date', 'time']
 
     def is_past(self):
         return datetime.date.today() > self.date and datetime.datetime.now().time() > self.time
