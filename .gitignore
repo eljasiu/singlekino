@@ -3,7 +3,6 @@
 *.pot
 *.pyc
 __pycache__
-db.sqlite3
 media
 
 # Python # 
@@ -22,4 +21,3 @@ media
 *.DS_Store
 **/__pycache__
 **/.DS_Store
-**/db.sqlite3
