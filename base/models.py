@@ -27,7 +27,7 @@ class Show(models.Model):
         ordering = ['date', 'time']
 
     def is_past(self):
-        return datetime.date.today() > self.date and datetime.datetime.now().time() > self.time
+        return datetime.date.today() >= self.date and datetime.datetime.now().time() > self.time
 
     def __str__(self):
         return "{}_{}_{}".format(self.movie, self.date, self.time)
