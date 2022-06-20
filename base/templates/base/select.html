@@ -5,7 +5,7 @@
 
 <div class="show_details">
     <h2>{{show.movie}}</h2>
-    <p>{{show.date}}, {{show.time}}</p>
+    <p>{{show.date|date:"d.m.y"}} - {{show.time|date:"G:i"}}</p>
 </div>
 
 <form action="{% url 'reserve' show.id %}" method='post'>
